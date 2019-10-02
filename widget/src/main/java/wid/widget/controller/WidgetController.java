@@ -2,66 +2,86 @@ package wid.widget.controller;
 
 import org.springframework.web.bind.annotation.*;
 import wid.widget.entity.Widget;
-import wid.widget.exceptions.NotFoundException;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("widgets")
 public class WidgetController {
-    private int counter = 4;
-    Widget widget = new Widget(0, 10, 10, new Date());
-    Widget widget1 = new Widget(1, 15, 15, new Date());
-    Widget widget2 = new Widget(2, 20, 20, new Date());
-
-
-    private List<Map<String, Object>> widgetList = new ArrayList<Map<String, Object>>() {{
-        add(new HashMap<String, Object>(){{put("id", "1"); put("Object", widget);}});
-        add(new HashMap<String, Object>(){{put("id", "2"); put("Object", widget1);}});
-        add(new HashMap<String, Object>(){{put("id", "3"); put("Object", widget2);}});
+    Widget widget = new Widget(1, 10, 10);
+    Widget widget1 = new Widget(0, 15, 15);
+    Widget widget2 = new Widget(2, 20, 20);
+    private List<Widget> widgetList = new ArrayList<Widget>() {{
+        add(widget);
+        add(widget1);
+        add(widget2);
     }};
 
 
+    //Отоброжение всего листа
     @GetMapping
-    public List<Map<String, Object>> list() {
+    public List<Widget> list() {
+        Collections.sort(widgetList, new Comparator<Widget>() {
+            @Override
+            public int compare(Widget o1, Widget o2) {
+                if (o1.getzIndex() > o2.getzIndex()) {
+                    return 1;
+                } if (o1.getzIndex() < o2.getzIndex()) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
         return widgetList;
     }
 
+
+    //Отображение одного виджета
     @GetMapping("{id}")
-    public Map<String, Object> getOne(@PathVariable String id) {
+    public Widget getOne(@PathVariable int id) {
         return getWidget(id);
     }
 
-    private Map<String, Object> getWidget(@PathVariable String id) {
-        return widgetList.stream()
-                .filter(widgetList -> widgetList.get("id").equals(id))
-                .findFirst()
-                .orElseThrow(NotFoundException::new);
+    //Поиск по коллекции
+    private Widget getWidget(@PathVariable int id) {
+        return widgetList.stream().filter(item -> item.getId() == id).collect(Collectors.toList()).get(0);
     }
 
-
+    //Создание виджета
     @PostMapping
-    public Map<String, Object> create(@RequestBody Map<String, Object> widget) {
-        widget.put("id", String.valueOf(counter++));
-
-        widgetList.add(widget);
-
-        return widget;
+    public List<Widget> create(@RequestBody Widget widget) throws IOException {
+        try {
+                for (int i = 0; widgetList.size() > i; ++i) {
+                Widget oldValue = widgetList.get(i);
+                if (widget.getzIndex() <= oldValue.getzIndex()) {
+                    int newValue = oldValue.getzIndex() + 1;
+                    Widget widgetForSet = new Widget(newValue, oldValue.getX(), oldValue.getY());
+                    widgetList.set(i, widgetForSet);
+                }
+            }
+            widgetList.add(widget);
+        } catch (IndexOutOfBoundsException e) {
+            widgetList.add(widget);
+        }
+        return widgetList;
     }
 
+    //Редактирование виджета
     @PutMapping("{id}")
-    public Map<String, Object> update(@PathVariable String id, @RequestBody Map<String, Object> widget) {
-        Map<String, Object> widgetFromDB = getWidget(id);
-
-        widgetFromDB.putAll(widget);
-        widgetFromDB.put("id", id);
-
-        return widgetFromDB;
+    public List<Widget> update(@PathVariable int id, @RequestBody Widget widget) {
+        Widget createWidget = getWidget(id);
+        createWidget.setzIndex(widget.getzIndex());
+        createWidget.setX(widget.getX());
+        createWidget.setY(widget.getY());
+        return widgetList;
     }
 
+    //Удаление виджета
     @DeleteMapping("{id}")
-    public void delete (@PathVariable String id){
-        Map<String, Object> widget = getWidget(id);
+    public void delete (@PathVariable int id){
+        Widget widget = getWidget(id);
         widgetList.remove(widget);
     }
 }

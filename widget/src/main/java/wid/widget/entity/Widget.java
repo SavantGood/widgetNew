@@ -1,8 +1,11 @@
 package wid.widget.entity;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Widget {
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private int id;
 
     private int zIndex;
 
@@ -12,12 +15,12 @@ public class Widget {
 
     private Date date;
 
-    public Widget(int zIndex, int x, int y, Date date) {
-
+    public Widget(int zIndex, int x, int y) {
         this.zIndex = zIndex;
         this.x = x;
         this.y = y;
-        this.date = date;
+        this.date = new Date();
+        this.id = count.incrementAndGet();
     }
 
 
@@ -51,5 +54,13 @@ public class Widget {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
