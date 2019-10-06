@@ -1,13 +1,13 @@
 package wid.widget.controller;
 
 import org.springframework.web.bind.annotation.*;
+import wid.widget.SortedZindex;
 import wid.widget.entity.Widget;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +24,7 @@ public class WidgetController {
         add(widget2);
     }};
 
-    private void addElements() {
+    private void addElements(){
         for (int i = 0; i < 500; i++) {
             int x = 10;
             int y = 10;
@@ -33,23 +33,41 @@ public class WidgetController {
         }
     }
 
+
     //Отоброжение всего листа
     @GetMapping
     public List<Widget> list() {
-        //addElements();
-        Collections.sort(widgetList, new Comparator<Widget>() {
-            // Вынести в Utils
-            @Override
-            public int compare(Widget o1, Widget o2) {
-                if (o1.getzIndex() > o2.getzIndex()) {
-                    return 1;
-                } if (o1.getzIndex() < o2.getzIndex()) {
-                    return -1;
-                }
-                return 0;
-            }
-        });
+        addElements();
+        Collections.sort(widgetList, new SortedZindex());
         return widgetList;
+    }
+
+    //Пагинация
+    @GetMapping("/getListForPage")
+    public List<Widget> pagination(HttpServletRequest request) {
+        try {
+            if (request.getParameter("countItems") == null){
+                return forPagination(10, 1);
+            } if (request.getParameter("countItems") != null) {
+                int countItems = Integer.parseInt(request.getParameter("countItems"));
+                int page = Integer.parseInt(request.getParameter("page"));
+                return forPagination(countItems, page);
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return forPagination(10, 1);
+        }
+        return forPagination(10, 1);
+    }
+
+    private List<Widget> forPagination(int countItems, int page) {
+        List<Widget> widgetListPage1 = new ArrayList<>();
+        int startIndex = (page - 1) * countItems;
+        int endIndex = startIndex + countItems > widgetList.size() ? widgetList.size() : startIndex + countItems;
+        for (int i = startIndex; i < endIndex; ++i) {
+            Widget oldElement = widgetList.get(i);
+            widgetListPage1.add(oldElement);
+        }
+        return widgetListPage1;
     }
 
 
@@ -100,22 +118,4 @@ public class WidgetController {
         widgetList.remove(widget);
     }
 
-    //Пагинация
-    @GetMapping("/getListForPage")
-    public List<Widget> pagination(HttpServletRequest request) {
-        int countItems = 10, page = 1;
-        // проверки на отрицательные числа и на 0
-        if (request.getParameter("countItems") != null) {
-            countItems = Integer.parseInt(request.getParameter("countItems"));
-        }
-        page = Integer.parseInt(request.getParameter("page"));
-        List<Widget> widgetListPage1 = new ArrayList<>();
-        int startIndex = (page - 1) * countItems;
-        int endIndex = startIndex + countItems > widgetList.size() ? widgetList.size() : startIndex + countItems;
-        for (int i = startIndex; i < endIndex; ++i) {
-            Widget oldElement = widgetList.get(i);
-            widgetListPage1.add(oldElement);
-        }
-        return widgetListPage1;
-    }
 }
