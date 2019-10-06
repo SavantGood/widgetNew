@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
+import wid.widget.dao.WidgetDAO;
+import wid.widget.dao.WidgetDAOImpl;
 import wid.widget.entity.Widget;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,13 +17,17 @@ public class WidgetControllerJUnitTest {
     @Test
     public void list() {
         WidgetController wc = new WidgetController();
+        Widget widget = new Widget(1, 10, 10);
+        Widget widget1 = new Widget(0, 15, 15);
+        Widget widget2 = new Widget(2, 20, 20);
+
 
         List<Widget> expected = wc.list();
 
         List<Widget> actual = new ArrayList<>();
-        actual.add(wc.widget1);
-        actual.add(wc.widget);
-        actual.add(wc.widget2);
+        actual.add(widget);
+        actual.add(widget1);
+        actual.add(widget2);
 
         Assert.assertEquals(expected, actual);
     }
