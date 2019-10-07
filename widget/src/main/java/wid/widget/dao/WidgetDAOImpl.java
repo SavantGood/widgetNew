@@ -33,7 +33,7 @@ public class WidgetDAOImpl implements WidgetDAO {
 
     @Override
     public List<Widget> list() {
-        addElements();
+        //addElements();
         Collections.sort(widgetList, new SortedZindex());
         return widgetList;
     }
