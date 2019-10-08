@@ -22,18 +22,19 @@ public class WidgetDAOImpl implements WidgetDAO {
         add(widget2);
     }};
 
-    private void addElements(){
+    //Метод для генерации виджетов
+    public void addElements(List<Widget> addWidgets){
         for (int i = 0; i < 500; i++) {
             int x = 10;
             int y = 10;
-            int zIndex = 1;
-            widgetList.add(new Widget(zIndex + i, x + 10*i, y + 10*i));
+            int zIndex = 3;
+            addWidgets.add(new Widget(zIndex + i, x + 10*i, y + 10*i));
         }
     }
 
     @Override
     public List<Widget> list() {
-        //addElements();
+        //addElements(widgetList);
         Collections.sort(widgetList, new SortedZindex());
         return widgetList;
     }
