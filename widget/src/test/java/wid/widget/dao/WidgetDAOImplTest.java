@@ -36,7 +36,7 @@ public class WidgetDAOImplTest {
 
     @Test
     public void delete () {
-        wd.delete(1);
+        wd.delete(wd.widget);
         List<Widget> expected = wd.list();
         List<Widget> actual = wd.list();
         actual.remove(wd.widget);

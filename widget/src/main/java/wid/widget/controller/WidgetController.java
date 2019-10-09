@@ -22,7 +22,16 @@ public class WidgetController {
     //Пагинация
     @GetMapping("/getListForPage")
     public List<Widget> pagination(HttpServletRequest request) {
-        return widgetService.pagination(request);
+        try {
+            String countItems = request.getParameter("countItems");
+            String page = request.getParameter("page");
+            return widgetService.pagination(
+                    countItems != null ? Integer.parseInt(countItems) : 10,
+                    page != null ? Integer.parseInt(page) : 1);
+        } catch (ArrayIndexOutOfBoundsException e) {
+
+        }
+        return null;
     }
 
     //Отображение одного виджета
@@ -38,14 +47,14 @@ public class WidgetController {
     }
 
     //Редактирование виджета
-    @PutMapping("{id}")
-    public List<Widget> update(@PathVariable int id, @RequestBody Widget widget) {
-        return widgetService.update(id, widget);
+    @PutMapping
+    public List<Widget> update(@RequestBody Widget widget) {
+        return widgetService.update(widget);
     }
 
     //Удаление виджета
     @DeleteMapping("{id}")
-    public void delete (@PathVariable int id){
+    public void delete(@PathVariable int id) {
         widgetService.delete(id);
     }
 }

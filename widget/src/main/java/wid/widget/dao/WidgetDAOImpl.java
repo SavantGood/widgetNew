@@ -34,28 +34,14 @@ public class WidgetDAOImpl implements WidgetDAO {
 
     @Override
     public List<Widget> list() {
+
         //addElements(widgetList);
         Collections.sort(widgetList, new SortedZindex());
         return widgetList;
     }
 
     @Override
-    public List<Widget> pagination(HttpServletRequest request) {
-        try {
-            if (request.getParameter("countItems") == null){
-                return forPagination(10, 1);
-            } if (request.getParameter("countItems") != null) {
-                int countItems = Integer.parseInt(request.getParameter("countItems"));
-                int page = Integer.parseInt(request.getParameter("page"));
-                return forPagination(countItems, page);
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return forPagination(10, 1);
-        }
-        return forPagination(10, 1);
-    }
-
-    private List<Widget> forPagination(int countItems, int page) {
+    public List<Widget> pagination(int countItems, int page) {
         List<Widget> widgetListPage1 = new ArrayList<>();
         int startIndex = (page - 1) * countItems;
         int endIndex = startIndex + countItems > widgetList.size() ? widgetList.size() : startIndex + countItems;
@@ -68,44 +54,30 @@ public class WidgetDAOImpl implements WidgetDAO {
 
     @Override
     public Widget getOne(int id) {
-        return getWidget(id);
-    }
-
-    //Поиск по коллекции
-    private Widget getWidget(@PathVariable int id) {
         return widgetList.stream().filter(item -> item.getId() == id).collect(Collectors.toList()).get(0);
     }
 
     @Override
     public List<Widget> create(Widget widget) {
         try {
-            for (int i = 0; widgetList.size() > i; ++i) {
-                Widget oldValue = widgetList.get(i);
-                if (widget.getzIndex() <= oldValue.getzIndex()) {
-                    int newValue = oldValue.getzIndex() + 1;
-                    Widget widgetForSet = new Widget(newValue, oldValue.getX(), oldValue.getY());
-                    widgetList.set(i, widgetForSet);
-                }
-            }
             widgetList.add(widget);
         } catch (IndexOutOfBoundsException e) {
-            widgetList.add(widget);
+
         }
         return widgetList;
     }
 
     @Override
-    public List<Widget> update(int id, Widget widget) {
-        Widget createWidget = getWidget(id);
-        createWidget.setzIndex(widget.getzIndex());
-        createWidget.setX(widget.getX());
-        createWidget.setY(widget.getY());
+    public List<Widget> update(Widget widget) {
+        List<Widget> list = widgetList.stream().filter(item -> widget.getId() == item.getId()).collect(Collectors.toList());
+        if (list.size() == 1) {
+            widgetList.set(widgetList.indexOf(list.get(0)), widget);
+        }
         return widgetList;
     }
 
     @Override
-    public void delete(int id) {
-        Widget widget = getWidget(id);
+    public void delete(Widget widget) {
         widgetList.remove(widget);
     }
 }
