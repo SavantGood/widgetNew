@@ -57,7 +57,7 @@ public class WidgetDAOImplH2 extends Util implements WidgetDAOH2 {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                Widget widget = new Widget(
+                 Widget widget = new Widget(
                         resultSet.getInt("zIndex"),
                         resultSet.getInt("x"),
                         resultSet.getInt("y")
@@ -65,7 +65,6 @@ public class WidgetDAOImplH2 extends Util implements WidgetDAOH2 {
                 widget.setId(resultSet.getInt("ID"));
                 widget.setDate(resultSet.getDate("Date"));
                 widgetOne.add(widget);
-                preparedStatement.executeUpdate();
 
                 return widget;
             }
