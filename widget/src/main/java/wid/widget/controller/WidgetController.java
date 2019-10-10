@@ -29,7 +29,7 @@ public class WidgetController {
                     countItems != null ? Integer.parseInt(countItems) : 10,
                     page != null ? Integer.parseInt(page) : 1);
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            e.printStackTrace();
         }
         return null;
     }

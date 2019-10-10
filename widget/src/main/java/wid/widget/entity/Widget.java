@@ -63,4 +63,15 @@ public class Widget {
     public void setId(int id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Widget{" +
+                "id=" + id +
+                ", zIndex=" + zIndex +
+                ", x=" + x +
+                ", y=" + y +
+                ", date=" + date +
+                '}';
+    }
 }

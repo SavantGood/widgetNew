@@ -12,6 +12,6 @@ public class SortedZindex implements Comparator<Widget> {
         } if (o1.getzIndex() < o2.getzIndex()) {
             return -1;
         }
-            return 0;
+        return 0;
     }
 }

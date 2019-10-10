@@ -1,10 +1,8 @@
 package wid.widget.dao;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import wid.widget.SortedZindex;
 import wid.widget.entity.Widget;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +10,7 @@ import java.util.stream.Collectors;
 
 public class WidgetDAOImpl implements WidgetDAO {
 
+    //Тестовые данные
     Widget widget = new Widget(1, 10, 10);
     Widget widget1 = new Widget(0, 15, 15);
     Widget widget2 = new Widget(2, 20, 20);
@@ -22,8 +21,9 @@ public class WidgetDAOImpl implements WidgetDAO {
         add(widget2);
     }};
 
-    //Метод для генерации виджетов
+    //Метод для генерации тестовых виджетов
     public void addElements(List<Widget> addWidgets){
+
         for (int i = 0; i < 500; i++) {
             int x = 10;
             int y = 10;
@@ -34,7 +34,6 @@ public class WidgetDAOImpl implements WidgetDAO {
 
     @Override
     public List<Widget> list() {
-
         //addElements(widgetList);
         Collections.sort(widgetList, new SortedZindex());
         return widgetList;
@@ -59,11 +58,7 @@ public class WidgetDAOImpl implements WidgetDAO {
 
     @Override
     public List<Widget> create(Widget widget) {
-        try {
-            widgetList.add(widget);
-        } catch (IndexOutOfBoundsException e) {
-
-        }
+        widgetList.add(widget);
         return widgetList;
     }
 
