@@ -1,15 +1,20 @@
 package wid.widget.service;
 
-import wid.widget.dao.WidgetDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Service;
 import wid.widget.dao.WidgetDAOImpl;
 import wid.widget.entity.Widget;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
+@Configurable
 public class WidgetServiceImpl implements WidgetService {
-    private WidgetDAO widgetDAO = new WidgetDAOImpl();
+
+    @Autowired
+    private WidgetDAOImpl widgetDAO;
 
     @Override
     public List<Widget> list() {

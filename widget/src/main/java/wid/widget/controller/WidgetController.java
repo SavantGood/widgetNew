@@ -1,5 +1,6 @@
 package wid.widget.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import wid.widget.entity.Widget;
 import wid.widget.service.WidgetService;
@@ -11,7 +12,9 @@ import java.util.List;
 @RestController
 @RequestMapping("widgets")
 public class WidgetController {
-    private WidgetService widgetService = new WidgetServiceImpl();
+
+    @Autowired
+    private WidgetService widgetService;
 
     //Отоброжение всего листа
     @GetMapping

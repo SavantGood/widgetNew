@@ -1,10 +1,17 @@
 package wid.widget.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Component
 public class Widget {
     private static final AtomicInteger count = new AtomicInteger(0);
+
     private int id;
 
     private int zIndex;
@@ -15,6 +22,8 @@ public class Widget {
 
     private Date date;
 
+    public Widget () {
+    }
     public Widget(int zIndex, int x, int y) {
         this.zIndex = zIndex;
         this.x = x;

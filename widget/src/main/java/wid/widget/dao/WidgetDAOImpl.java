@@ -1,5 +1,7 @@
 package wid.widget.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import wid.widget.SortedZindex;
 import wid.widget.entity.Widget;
 
@@ -8,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class WidgetDAOImpl implements WidgetDAO {
 
     //Тестовые данные
@@ -35,7 +38,7 @@ public class WidgetDAOImpl implements WidgetDAO {
     @Override
     public List<Widget> list() {
         //addElements(widgetList);
-        Collections.sort(widgetList, new SortedZindex());
+        widgetList.sort(new SortedZindex());
         return widgetList;
     }
 

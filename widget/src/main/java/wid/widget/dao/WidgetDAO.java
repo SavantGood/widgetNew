@@ -2,7 +2,6 @@ package wid.widget.dao;
 
 import wid.widget.entity.Widget;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface WidgetDAO {
